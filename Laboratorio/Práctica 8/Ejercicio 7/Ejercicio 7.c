@@ -1,0 +1,26 @@
+#INCLUDE <16F877.H> 
+#FUSES HS,NOWDT,NOPROTECT,NOLVP 
+#USE DELAY(CLOCK=20000000)
+#ORG 0x1F00, 0x1FFF VOID LOADER16F877(VOID) {}
+#DEFINE USE_PORTB_LCD TRUE 
+#INCLUDE <LCD.C>
+
+INT VAR1, VAR2 = 0;
+
+VOID MAIN()
+{ 
+    LCD_INIT();
+    WHILE(TRUE)  //CICLO WHILE INFINITO
+    { 
+        VAR1=INPUT_A();
+        IF(VAR1==0){
+          VAR2 = VAR2 + 1;
+        }
+        LCD_GOTOXY(5,1);
+        PRINTF(LCD_PUTC,"%dD", VAR2); 
+        LCD_GOTOXY(5,2); 
+        PRINTF(LCD_PUTC,"%XH", VAR2);
+        DELAY_MS(250); 
+     }
+}
+
