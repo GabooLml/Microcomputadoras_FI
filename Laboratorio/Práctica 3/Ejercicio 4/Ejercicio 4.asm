@@ -1,0 +1,56 @@
+        PROCESSOR 16F877
+        INCLUDE <P16F877.INC>
+
+        VALOR1 EQU H'21'
+        VALOR2 EQU H'22'
+        VALOR3 EQU H'23'
+        CTE1   EQU H'50'
+        CTE2   EQU H'50'
+        CTE3   EQU H'60'
+        STATE1 EQU H'40'
+        STATE2 EQU H'41'
+
+        ORG 0
+        GOTO INICIO
+
+        ORG 5
+INICIO: BSF STATUS, RP0
+        BCF STATUS, RP1
+        MOVLW H'00'
+        MOVWF TRISB
+        BCF STATUS, RP0
+        CLRF PORTB
+        MOVLW H'9C'
+        MOVWF STATE1
+        MOVLW H'AC'
+        MOVWF STATE2
+
+LOOP:   MOVF STATE1, 0
+        MOVWF PORTB
+        CALL RETARDO
+        MOVF STATE2, 0
+        MOVWF PORTB
+        CALL RETARDO
+        GOTO SWAP
+
+SWAP:   SWAPF STATE1
+        SWAPF STATE2
+        GOTO LOOP
+
+RETARDO:MOVLW CTE1
+        MOVWF VALOR1
+
+TRES:   MOVLW CTE2
+        MOVWF VALOR2
+
+DOS:    MOVLW CTE3
+        MOVWF VALOR3
+
+UNO:    DECFSZ VALOR3
+        GOTO UNO
+        DECFSZ VALOR2
+        GOTO DOS
+        DECFSZ VALOR1
+        GOTO TRES
+        RETURN
+        END;
